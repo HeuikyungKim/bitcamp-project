@@ -3,16 +3,47 @@ package bitcamp.java89.ems;
 import java.util.Scanner;
 
 public class EduApp {
+  static Student[] students = new Student[100];
+  static int length = 0;
+  static Scanner keyScan = new Scanner(System.in);
+
   public static void main(String[] args) {
     System.out.println("비트캠프 관리시스템에 오신걸 환영합니다.");
 
-    //여러명의 학생 정보를 입력하기 위한 레퍼런스 배열을 만든다.
-    Student[] students = new Student[100];
-    int length = 0; // 레퍼런스 배열에 몇명의 학생 정보를 저장했는지 개수를 보관한다.
-                    // 레퍼런스 배열에 몇 개의 Student 인스턴스가 들어 있는지 그 개수를 보관한다.
+    loop:
+    while (true) {
+      System.out.print("명령> ");
+      String command = keyScan.nextLine().toLowerCase();
 
-    Scanner keyScan = new Scanner(System.in);
+      switch (command) {
+      case "add": doAdd(); break;
+      case "list": doList(); break;
+      case "view": doView(); break;
+      case "quit":
+        System.out.println("Good bye!");
+        break loop;
+      default:
+        System.out.println("지원하지 않는 명령어입니다.");
+      }
+    }
+  }
 
+  static void doList() {
+    for (int i = 0; i < length; i++) {
+      Student student = students[i];
+      System.out.printf("%s,%s,%s,%s,%s,%s,%d,%s\n",
+        student.userId,
+        student.password,
+        student.name,
+        student.tel,
+        student.email,
+        ((student.working)?"yes":"no"),
+        student.birthYear,
+        student.school);
+    }
+  }
+
+  static void doAdd() {
     // 반복 해서 입력 받는다.
     while (length < students.length) {
       Student student = new Student();
@@ -46,23 +77,23 @@ public class EduApp {
       if (!keyScan.nextLine().equals("y"))
         break;
     }
-
-    printStudentList(students, length);
-
   }
 
-  static void printStudentList(Student[] students, int length) {
+  static void doView() {
+    System.out.print("조회할 학생의 아이디는? ");
+    String userId = keyScan.nextLine().toLowerCase();
     for (int i = 0; i < length; i++) {
-      Student student = students[i];
-      System.out.printf("%s,%s,%s,%s,%s,%s,%d,%s\n",
-        student.userId,
-        student.password,
-        student.name,
-        student.tel,
-        student.email,
-        ((student.working)?"yes":"no"),
-        student.birthYear,
-        student.school);
+      if (students[i].userId.toLowerCase().equals(userId)) {
+        System.out.printf("아이디: %s\n", students[i].userId);
+        System.out.printf("암호: (***)\n");
+        System.out.printf("이름: %s\n", students[i].name);
+        System.out.printf("전화: %s\n", students[i].tel);
+        System.out.printf("이메일: %s\n", students[i].email);
+        System.out.printf("재직중: %s\n", (students[i].working) ? "Yes" : "No");
+        System.out.printf("태어난 해: %d\n", students[i].birthYear);
+        System.out.printf("학교: %s\n", students[i].school);
+        break;
+      }
     }
   }
 }
