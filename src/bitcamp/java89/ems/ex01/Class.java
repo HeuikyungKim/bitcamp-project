@@ -1,4 +1,4 @@
-package bitcamp.java89.ems;
+package bitcamp.java89.ems.ex01;
 
 public class Class {
   //인스턴스 변수

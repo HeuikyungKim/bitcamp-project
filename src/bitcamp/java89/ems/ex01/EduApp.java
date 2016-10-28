@@ -1,4 +1,4 @@
-package bitcamp.java89.ems;
+package bitcamp.java89.ems.ex01;
 import java.util.Scanner;
 
 
