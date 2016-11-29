@@ -7,16 +7,18 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.Scanner;
 
+import bitcamp.java89.ems.server.context.ApplicationContext;
+
 public class RequestThread extends Thread {
   private Socket socket;
   private Scanner in;
   private PrintStream out;
   
-  private HashMap<String,Command> commandMap;
+  private ApplicationContext appContext;
   
-  public RequestThread(Socket socket, HashMap<String,Command> commandMap) {
+  public RequestThread(Socket socket, ApplicationContext appContext) {
     this.socket = socket;
-    this.commandMap = commandMap;
+    this.appContext = appContext;
   }
   
   @Override
@@ -47,7 +49,7 @@ public class RequestThread extends Thread {
           }
         }
         
-        Command commandHandler = commandMap.get(command[0]);
+        Command commandHandler = (Command)appContext.getBean(command[0]);
         
         if (commandHandler == null) {
           if (command[0].equals("quit")) {
@@ -72,13 +74,10 @@ public class RequestThread extends Thread {
     }
   }
   
-
-
   private boolean doQuit() {
     System.out.println("클라이언트 연결 종료!");
     return true;
   }
-
-
 }
+
 
