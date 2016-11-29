@@ -3,17 +3,31 @@ package bitcamp.java89.ems.server.controller;
 import java.io.PrintStream;
 import java.util.HashMap;
 
-import bitcamp.java89.ems.server.Command;
+import bitcamp.java89.ems.server.AbstractCommand;
 import bitcamp.java89.ems.server.dao.StudentDao;
 import bitcamp.java89.ems.server.vo.Student;
 
-public class StudentViewController implements Command {
-
-
+public class StudentViewController extends AbstractCommand {
+  // 의존 객체 DAO를 저장할 변수 선언
+  StudentDao studentDao;
+  
+  // 의존 객체 주입할 때 호출할 셋터 추가
+  public void setStudentDao(StudentDao studentDao) {
+    this.studentDao = studentDao;
+  } 
+  
+  @Override
+  public String getCommandString() {
+    return "student/view";
+  }
+  
   //view?userId=aaa
-  public void service(HashMap<String,String> paramMap, PrintStream out) {
-    try {
-    StudentDao studentDao = StudentDao.getInstance();
+  @Override
+  protected void doResponse(HashMap<String,String> paramMap, PrintStream out) 
+      throws Exception {
+    // 주입 받은 studentDao를 사용할 것이기 때문에 
+    // 더이상 이 메서드에서 StudentDao 객체를 준비하지 않는다.
+    // => 단 이 메서드가 호출되기 전에 반드시 StudentDao가 주입되어 있어야 한다.
     if (!studentDao.existUserId(paramMap.get("userId"))) {
       out.println("해당 아이디의 학생이 없습니다.");
       return;
@@ -28,10 +42,6 @@ public class StudentViewController implements Command {
     out.printf("재직중: %s\n", (student.isWorking()) ? "Yes" : "No");
     out.printf("태어난 해: %d\n", student.getBirthYear());
     out.printf("학교: %s\n", student.getSchool());
-    } catch (Exception e) {
-      out.println("작업중 예외가 발생하였습니다");
-      e.printStackTrace();
-    }
   }
 }
 

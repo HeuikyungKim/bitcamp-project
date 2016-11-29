@@ -3,15 +3,22 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import bitcamp.java89.ems.server.Command;
+import bitcamp.java89.ems.server.AbstractCommand;
 import bitcamp.java89.ems.server.dao.TextBookDao;
 import bitcamp.java89.ems.server.vo.TextBook;
 
 public class TextBookViewController extends AbstractCommand {
+  TextBookDao textBookDao;
+  public void setTextBookDao(TextBookDao textBookDao) {
+    this.textBookDao = textBookDao;
+  }
+  @Override
+  public String getCommandString() {
+    return "textBook/view";
+  }
 
   @Override
   protected void doResponse(HashMap<String,String> paramMap, PrintStream out) throws Exception {
-      TextBookDao textBookDao = TextBookDao.getInstance();
       ArrayList<TextBook> list = textBookDao.getListByName(paramMap.get("title"));
       for (TextBook textBook : list) {
         out.println("--------------------------");

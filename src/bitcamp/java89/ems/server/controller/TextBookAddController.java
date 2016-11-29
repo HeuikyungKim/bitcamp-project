@@ -2,15 +2,23 @@ package bitcamp.java89.ems.server.controller;
 import java.io.PrintStream;
 import java.util.HashMap;
 
-import bitcamp.java89.ems.server.Command;
+import bitcamp.java89.ems.server.AbstractCommand;
 import bitcamp.java89.ems.server.dao.TextBookDao;
 import bitcamp.java89.ems.server.vo.TextBook;
 
 public class TextBookAddController extends AbstractCommand {
+  TextBookDao textBookDao;
+  public void setTextBookDao(TextBookDao textBookDao) {
+    this.textBookDao = textBookDao;
+  }
+  @Override
+  public String getCommandString() {
+    return "textBook/add";
+  }
 
   @Override
   protected void doResponse(HashMap<String,String> paramMap, PrintStream out) throws Exception {
-    TextBookDao textBookDao = TextBookDao.getInstance();
+
     if (textBookDao.existTitle(paramMap.get("title"))) {
       out.println("같은 책제목이 존재합니다. 등록을 취소합니다.");
       return;

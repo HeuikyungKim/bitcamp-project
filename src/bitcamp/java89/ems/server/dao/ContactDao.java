@@ -1,25 +1,10 @@
-package bitcamp.java89.ems.server.dao;//일반화. 공통뽑아 올림
+package bitcamp.java89.ems.server.dao;
 
 import java.util.ArrayList;
 
 import bitcamp.java89.ems.server.vo.Contact;
 
-public class ContactDao extends AbstractDao<Contact> { //상속시 파일지정
-  static ContactDao obj;
-
-  
-  public static ContactDao getInstance() throws Exception {
-    if (obj == null) {
-      obj = new ContactDao();
-      obj.load();
-    }
-    return obj;
-  }
- 
-  private ContactDao() throws Exception {
-    super("contact-v1.9.data");
-
-  }
+public class ContactDao extends AbstractDao<Contact> {
 
   public ArrayList<Contact> getList() {
     return this.list;

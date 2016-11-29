@@ -1,4 +1,4 @@
-package bitcamp.java89.ems.server.dao; //generalization 속성, 메서드 상속하는 기능 / 어차피 재정의해야할 메서드라면. 
+package bitcamp.java89.ems.server.dao;
 
 import java.io.EOFException;
 import java.io.FileInputStream;
@@ -12,18 +12,18 @@ public abstract class AbstractDao<T> {
   private String filename;
   protected ArrayList<T> list;
 
-  public AbstractDao(String filename) {
-    //super();
+  // 파일명을 객체 생성 후 외부에서 주입 받는다.
+  public void setFilename(String filename) {
     this.filename = filename;
   }
 
   @SuppressWarnings("unchecked")
-  protected void load() throws Exception {
+  public void load() throws Exception {
     try (
         ObjectInputStream in = new ObjectInputStream(
-            new FileInputStream(this.filename));) {
-      list = (ArrayList<T>)in.readObject();
-
+                                new FileInputStream(this.filename));) {
+        list = (ArrayList<T>)in.readObject();
+     
     } catch (EOFException e) {
       // 파일을 모두 읽었다.
     } catch (Exception e) {
@@ -34,8 +34,8 @@ public abstract class AbstractDao<T> {
 
   public synchronized void save() throws Exception {
     try (
-        ObjectOutputStream out = new ObjectOutputStream(
-            new FileOutputStream(this.filename)); ) {
+      ObjectOutputStream out = new ObjectOutputStream(
+                                  new FileOutputStream(this.filename)); ) {
       out.writeObject(list);
     } catch (Exception e) {
       throw e;
@@ -43,3 +43,5 @@ public abstract class AbstractDao<T> {
   }
 
 }
+
+
